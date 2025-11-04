@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Crown, LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
-import elevaticaLogo from '@/assets/elevatica-logo.png';
+import elevaticaLogo from '../../public/favicon.ico';
 
 const Navbar = () => {
   const { user, isAdmin, signOut } = useAuth();
