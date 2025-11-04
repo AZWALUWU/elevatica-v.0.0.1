@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Crown, LogOut, BookOpen, Menu, X } from 'lucide-react';
+import { Crown, LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
+import elevaticaLogo from '@/assets/elevatica-logo.png';
 
 const Navbar = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -53,9 +54,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 bg-gradient-gold rounded flex items-center justify-center transform group-hover:scale-110 transition-transform">
-              <BookOpen className="w-5 h-5 text-black" />
-            </div>
+            <img 
+              src={elevaticaLogo} 
+              alt="Elevatica Logo" 
+              className="w-10 h-10 transform group-hover:scale-110 transition-transform"
+            />
             <span className="text-xl md:text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
               Elevatica
             </span>

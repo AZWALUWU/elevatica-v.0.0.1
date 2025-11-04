@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 
 interface Blog {
   id: string;
@@ -23,6 +24,7 @@ const Research = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!user) {
@@ -31,7 +33,56 @@ const Research = () => {
     }
 
     fetchBlogs();
-  }, [user, navigate]);
+
+    // Subscribe to realtime changes for new blog posts
+    const channel = supabase
+      .channel('blogs-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'blogs'
+        },
+        (payload) => {
+          const newBlog = payload.new as Blog;
+          setBlogs(prevBlogs => [newBlog, ...prevBlogs]);
+          
+          toast({
+            title: '📚 Riset Baru Tersedia!',
+            description: `${newBlog.title} - ${newBlog.pair} (${newBlog.position.toUpperCase()})`,
+            duration: 5000,
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'blogs'
+        },
+        (payload) => {
+          const updatedBlog = payload.new as Blog;
+          setBlogs(prevBlogs => 
+            prevBlogs.map(blog => 
+              blog.id === updatedBlog.id ? updatedBlog : blog
+            )
+          );
+          
+          toast({
+            title: '🔄 Riset Diperbarui!',
+            description: `${updatedBlog.title} telah diperbarui`,
+            duration: 5000,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, navigate, toast]);
 
   const fetchBlogs = async () => {
     try {
