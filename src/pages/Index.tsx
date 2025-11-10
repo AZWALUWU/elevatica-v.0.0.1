@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, TrendingUp, Shield, BarChart3, BookOpen, Download, Bell } from 'lucide-react';
-import Navbar from '@/components/Navbar';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { toast } from 'sonner';
 import HomeInstalled from './HomeInstalled';
+import elevaticaLogo from '@/assets/elevatica-logo.png';
 
 const Index = () => {
   const { user } = useAuth();
@@ -33,7 +33,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      {/* Simple Header for Landing Page */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-2">
+              <img 
+                src={elevaticaLogo} 
+                alt="Elevatica Logo" 
+                className="w-10 h-10"
+              />
+              <span className="text-xl md:text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
+                Elevatica
+              </span>
+            </div>
+            <Link to="/auth">
+              <Button className="bg-gradient-gold text-black hover:shadow-gold font-semibold">
+                Login / Register
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">

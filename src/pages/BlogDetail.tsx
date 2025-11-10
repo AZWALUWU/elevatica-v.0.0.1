@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import Navbar from '@/components/Navbar';
+import NavigationPanel from '@/components/NavigationPanel';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, TrendingUp, TrendingDown, FileText } from 'lucide-react';
@@ -73,9 +73,11 @@ const BlogDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 pt-24">
-          <p className="text-center text-muted-foreground">Loading...</p>
+        <NavigationPanel />
+        <div className="md:pl-20 pb-16 md:pb-0">
+          <div className="container mx-auto px-4 pt-12">
+            <p className="text-center text-muted-foreground">Loading...</p>
+          </div>
         </div>
       </div>
     );
@@ -84,9 +86,11 @@ const BlogDetail = () => {
   if (!blog) {
     return (
       <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 pt-24">
-          <p className="text-center text-muted-foreground">Research paper not found.</p>
+        <NavigationPanel />
+        <div className="md:pl-20 pb-16 md:pb-0">
+          <div className="container mx-auto px-4 pt-12">
+            <p className="text-center text-muted-foreground">Research paper not found.</p>
+          </div>
         </div>
       </div>
     );
@@ -94,9 +98,10 @@ const BlogDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavigationPanel />
       
-      <div className="container mx-auto px-4 pt-24 pb-12">
+      <div className="md:pl-20 pb-16 md:pb-0">
+        <div className="container mx-auto px-4 pt-12 pb-12">
         <article className="max-w-4xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -129,42 +134,42 @@ const BlogDetail = () => {
             </h1>
           </div>
 
-          {/* Statistical Analysis Card */}
+          {/* Trading Analysis Card */}
           {(blog.supply || blog.demmand || blog.rate_setup || blog.fundamental || blog.indikator) && (
             <Card className="mb-8 bg-card border-border">
               <CardHeader>
-                <CardTitle className="text-gold">Statistical Analysis</CardTitle>
+                <CardTitle className="text-gold">Analisa Trading</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {blog.supply !== null && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {blog.supply && (
                     <div>
-                      <p className="text-muted-foreground text-sm">supply</p>
-                      <p className="text-2xl font-bold text-foreground">{blog.supply}</p>
+                      <p className="text-muted-foreground text-sm mb-1">Supply Zone</p>
+                      <p className="text-lg font-semibold text-foreground">{blog.supply}</p>
                     </div>
                   )}
-                  {blog.demmand !== null && (
+                  {blog.demmand && (
                     <div>
-                      <p className="text-muted-foreground text-sm">demmand</p>
-                      <p className="text-2xl font-bold text-foreground">{blog.demmand}</p>
+                      <p className="text-muted-foreground text-sm mb-1">Demand Zone</p>
+                      <p className="text-lg font-semibold text-foreground">{blog.demmand}</p>
                     </div>
                   )}
-                  {blog.rate_setup !== null && (
+                  {blog.rate_setup && (
                     <div>
-                      <p className="text-muted-foreground text-sm">rate_setup</p>
-                      <p className="text-2xl font-bold text-foreground">{blog.rate_setup}</p>
+                      <p className="text-muted-foreground text-sm mb-1">Rate Setup</p>
+                      <p className="text-lg font-semibold text-foreground">{blog.rate_setup}</p>
                     </div>
                   )}
-                  {blog.fundamental !== null && (
+                  {blog.fundamental && (
                     <div>
-                      <p className="text-muted-foreground text-sm">fundamental</p>
-                      <p className="text-2xl font-bold text-foreground">{blog.fundamental}</p>
+                      <p className="text-muted-foreground text-sm mb-1">Fundamental</p>
+                      <p className="text-lg font-semibold text-foreground">{blog.fundamental}</p>
                     </div>
                   )}
-                  {blog.indikator !== null && (
-                    <div>
-                      <p className="text-muted-foreground text-sm">indikator</p>
-                      <p className="text-2xl font-bold text-foreground">{blog.indikator}</p>
+                  {blog.indikator && (
+                    <div className="md:col-span-2">
+                      <p className="text-muted-foreground text-sm mb-1">Indikator</p>
+                      <p className="text-lg font-semibold text-foreground">{blog.indikator}</p>
                     </div>
                   )}
                 </div>
@@ -198,6 +203,7 @@ const BlogDetail = () => {
             </Card>
           )}
         </article>
+        </div>
       </div>
     </div>
   );

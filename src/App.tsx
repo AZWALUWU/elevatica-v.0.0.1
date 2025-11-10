@@ -11,6 +11,7 @@ import BlogDetail from "./pages/BlogDetail";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import HomeInstalled from "./pages/HomeInstalled";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/research" element={<Research />} />
             <Route path="/research/:slug" element={<BlogDetail />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

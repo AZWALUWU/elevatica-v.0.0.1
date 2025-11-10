@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import Navbar from '@/components/Navbar';
+import NavigationPanel from '@/components/NavigationPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -113,11 +113,11 @@ const Admin = () => {
         content: formData.content,
         pair: formData.pair,
         position: formData.position,
-        supply: formData.supply ? (formData.supply) : null,
-        demmand: formData.demmand ? (formData.demmand) : null,
-        rate_setup: formData.rate_setup ? (formData.rate_setup) : null,
-        fundamental: formData.fundamental ? (formData.fundamental) : null,
-        indikator: formData.indikator ? (formData.indikator) : null,
+        supply: formData.supply || null,
+        demmand: formData.demmand || null,
+        rate_setup: formData.rate_setup || null,
+        fundamental: formData.fundamental || null,
+        indikator: formData.indikator || null,
         pdf_url: pdfUrl,
         author_id: user!.id,
       };
@@ -192,11 +192,11 @@ const Admin = () => {
       content: blog.content,
       pair: blog.pair,
       position: blog.position,
-      supply: blog.supply?.toString() || '',
-      demmand: blog.demmand?.toString() || '',
-      rate_setup: blog.rate_setup?.toString() || '',
-      fundamental: blog.fundamental?.toString() || '',
-      indikator: blog.indikator?.toString() || '',
+      supply: blog.supply || '',
+      demmand: blog.demmand || '',
+      rate_setup: blog.rate_setup || '',
+      fundamental: blog.fundamental || '',
+      indikator: blog.indikator || '',
     });
     setDialogOpen(true);
   };
@@ -221,9 +221,10 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavigationPanel />
       
-      <div className="container mx-auto px-4 pt-24 pb-12">
+      <div className="md:pl-20 pb-16 md:pb-0">
+        <div className="container mx-auto px-4 pt-12 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-gold bg-clip-text text-transparent">
@@ -243,7 +244,7 @@ const Admin = () => {
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-card border-border">
                 <DialogHeader>
                   <DialogTitle className="text-gold">
-                    {editingBlog ? 'Edit Research Paper' : 'Update Blog'}
+                    {editingBlog ? 'Edit Research Paper' : 'Create New Research Paper'}
                   </DialogTitle>
                 </DialogHeader>
                 
@@ -298,60 +299,58 @@ const Admin = () => {
                     />
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label>supply</Label>
+                      <Label>Supply Zone</Label>
                       <Input
-                        type="string"
-                        step="any"
+                        type="text"
                         value={formData.supply}
                         onChange={(e) => setFormData({ ...formData, supply: e.target.value })}
+                        placeholder="Contoh: 1.2500 - 1.2550"
                         className="bg-input border-border"
                       />
                     </div>
                     <div>
-                      <Label>demmand</Label>
+                      <Label>Demand Zone</Label>
                       <Input
-                        type="string"
-                        step="any"
+                        type="text"
                         value={formData.demmand}
                         onChange={(e) => setFormData({ ...formData, demmand: e.target.value })}
+                        placeholder="Contoh: 1.2300 - 1.2350"
                         className="bg-input border-border"
                       />
                     </div>
                     <div>
-                      <Label>rate_setup</Label>
+                      <Label>Rate Setup</Label>
                       <Input
-                        type="string"
-                        step="any"
+                        type="text"
                         value={formData.rate_setup}
                         onChange={(e) => setFormData({ ...formData, rate_setup: e.target.value })}
+                        placeholder="Contoh: 1:3 Risk Reward"
+                        className="bg-input border-border"
+                      />
+                    </div>
+                    <div>
+                      <Label>Fundamental</Label>
+                      <Input
+                        type="text"
+                        value={formData.fundamental}
+                        onChange={(e) => setFormData({ ...formData, fundamental: e.target.value })}
+                        placeholder="Analisa fundamental"
                         className="bg-input border-border"
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>fundamental</Label>
-                      <Input
-                        type="string"
-                        step="any"
-                        value={formData.fundamental}
-                        onChange={(e) => setFormData({ ...formData, fundamental: e.target.value })}
-                        className="bg-input border-border"
-                      />
-                    </div>
-                    <div>
-                      <Label>indikator</Label>
-                      <Input
-                        type="string"
-                        step="any"
-                        value={formData.indikator}
-                        onChange={(e) => setFormData({ ...formData, indikator: e.target.value })}
-                        className="bg-input border-border"
-                      />
-                    </div>
+                  <div>
+                    <Label>Indikator</Label>
+                    <Input
+                      type="text"
+                      value={formData.indikator}
+                      onChange={(e) => setFormData({ ...formData, indikator: e.target.value })}
+                      placeholder="Indikator yang digunakan"
+                      className="bg-input border-border"
+                    />
                   </div>
 
                   <div>
@@ -417,6 +416,7 @@ const Admin = () => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

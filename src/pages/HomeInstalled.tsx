@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, TrendingUp, Shield, BarChart3, Check, Bell } from 'lucide-react';
-import Navbar from '@/components/Navbar';
+import NavigationPanel from '@/components/NavigationPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
@@ -12,8 +12,10 @@ const HomeInstalled = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavigationPanel />
       
+      {/* Main Content - Add padding for navigation panels */}
+      <div className="md:pl-20 pb-16 md:pb-0">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-overlay opacity-50"></div>
@@ -255,6 +257,7 @@ const HomeInstalled = () => {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 };

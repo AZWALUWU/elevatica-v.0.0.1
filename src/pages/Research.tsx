@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import Navbar from '@/components/Navbar';
+import NavigationPanel from '@/components/NavigationPanel';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -141,8 +141,9 @@ const Research = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavigationPanel />
       
+      <div className="md:pl-20 pb-16 md:pb-0">
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
@@ -247,6 +248,7 @@ const Research = () => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
