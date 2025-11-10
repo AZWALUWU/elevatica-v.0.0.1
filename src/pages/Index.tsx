@@ -6,11 +6,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { toast } from 'sonner';
+import HomeInstalled from './HomeInstalled';
 
 const Index = () => {
   const { user } = useAuth();
   const { isInstallable, isInstalled, installApp } = usePWAInstall();
   const { isSupported: isPushSupported, permission, requestPermission } = usePushNotifications();
+
+  // If app is installed, show the installed home page
+  if ( user || isInstalled) {
+    return <HomeInstalled />;
+  }
 
   const handleInstall = async () => {
     const success = await installApp();
