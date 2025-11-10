@@ -13,8 +13,8 @@ const Index = () => {
   const { isInstallable, isInstalled, installApp } = usePWAInstall();
   const { isSupported: isPushSupported, permission, requestPermission } = usePushNotifications();
 
-  // If app is installed, show the installed home page
-  if ( user || isInstalled) {
+  // If user is logged in or app is installed, show the installed home page
+  if (user || isInstalled) {
     return <HomeInstalled />;
   }
 

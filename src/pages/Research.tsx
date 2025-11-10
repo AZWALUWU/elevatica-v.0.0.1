@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
@@ -19,12 +20,35 @@ interface Blog {
   created_at: string;
 }
 
+type Category = 'all' | 'forex' | 'crypto' | 'stock';
+
+const getCategory = (pair: string): 'forex' | 'crypto' | 'stock' => {
+  const upperPair = pair.toUpperCase();
+  const cryptoSymbols = ['BTC', 'ETH', 'USDT', 'USDC', 'BNB', 'SOL', 'ADA', 'DOT', 'DOGE', 'XRP', 'MATIC', 'AVAX'];
+  
+  if (cryptoSymbols.some(symbol => upperPair.includes(symbol))) {
+    return 'crypto';
+  }
+  
+  if (upperPair.includes('/') && !cryptoSymbols.some(symbol => upperPair.includes(symbol))) {
+    return 'forex';
+  }
+  
+  return 'stock';
+};
+
 const Research = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const filteredBlogs = blogs.filter(blog => {
+    if (selectedCategory === 'all') return true;
+    return getCategory(blog.pair) === selectedCategory;
+  });
 
   useEffect(() => {
     if (!user) {
@@ -48,11 +72,24 @@ const Research = () => {
           const newBlog = payload.new as Blog;
           setBlogs(prevBlogs => [newBlog, ...prevBlogs]);
           
+          const category = getCategory(newBlog.pair);
+          const categoryLabel = category === 'forex' ? 'Forex' : category === 'crypto' ? 'Crypto' : 'Stock';
+          
           toast({
-            title: '📚 Riset Baru Tersedia!',
+            title: `📚 Riset ${categoryLabel} Baru!`,
             description: `${newBlog.title} - ${newBlog.pair} (${newBlog.position.toUpperCase()})`,
             duration: 5000,
           });
+
+          // Send push notification if supported and permission granted
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(`Riset ${categoryLabel} Baru Tersedia!`, {
+              body: `${newBlog.title} - ${newBlog.pair} (${newBlog.position.toUpperCase()})`,
+              icon: '/logo-192.png',
+              badge: '/logo-192.png',
+              tag: `research-${newBlog.id}`,
+            });
+          }
         }
       )
       .on(
@@ -108,28 +145,66 @@ const Research = () => {
       
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12 text-center">
-            <h1 className="text-5xl font-bold mb-4">
-              <span className="bg-gradient-gold bg-clip-text text-transparent">
-                Research Library
-              </span>
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Access our collection of in-depth market analysis and research papers
-            </p>
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h1 className="text-5xl font-bold mb-4">
+                <span className="bg-gradient-gold bg-clip-text text-transparent">
+                  Research Library
+                </span>
+              </h1>
+              <p className="text-muted-foreground text-lg">
+                Access our collection of in-depth market analysis and research papers
+              </p>
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button
+                variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('all')}
+                className={selectedCategory === 'all' ? 'bg-gradient-gold text-black' : ''}
+              >
+                All Research
+              </Button>
+              <Button
+                variant={selectedCategory === 'forex' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('forex')}
+                className={selectedCategory === 'forex' ? 'bg-gradient-gold text-black' : ''}
+              >
+                Forex
+              </Button>
+              <Button
+                variant={selectedCategory === 'crypto' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('crypto')}
+                className={selectedCategory === 'crypto' ? 'bg-gradient-gold text-black' : ''}
+              >
+                Crypto
+              </Button>
+              <Button
+                variant={selectedCategory === 'stock' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('stock')}
+                className={selectedCategory === 'stock' ? 'bg-gradient-gold text-black' : ''}
+              >
+                Stock
+              </Button>
+            </div>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">Loading research papers...</p>
             </div>
-          ) : blogs.length === 0 ? (
+          ) : filteredBlogs.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No research papers available yet.</p>
+              <p className="text-muted-foreground">
+                {selectedCategory === 'all' 
+                  ? 'No research papers available yet.' 
+                  : `No ${selectedCategory} research papers available yet.`}
+              </p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blogs.map((blog) => (
+              {filteredBlogs.map((blog) => (
                 <Link key={blog.id} to={`/research/${blog.slug}`}>
                   <Card className="h-full bg-card border-border hover:border-gold hover:shadow-gold transition-all duration-300 cursor-pointer">
                     <CardHeader>

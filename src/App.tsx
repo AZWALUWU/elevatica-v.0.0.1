@@ -10,6 +10,7 @@ import Research from "./pages/Research";
 import BlogDetail from "./pages/BlogDetail";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import HomeInstalled from "./pages/HomeInstalled";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/home" element={<HomeInstalled />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/research" element={<Research />} />
             <Route path="/research/:slug" element={<BlogDetail />} />

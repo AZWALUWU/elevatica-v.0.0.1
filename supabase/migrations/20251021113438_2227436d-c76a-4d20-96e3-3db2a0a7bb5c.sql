@@ -40,6 +40,7 @@ CREATE TABLE public.blogs (
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blogs ENABLE ROW LEVEL SECURITY;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.blogs;
 
 -- Create security definer function to check roles
 CREATE OR REPLACE FUNCTION public.has_role(_user_id UUID, _role app_role)
