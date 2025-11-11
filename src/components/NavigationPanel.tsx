@@ -18,76 +18,59 @@ const NavigationPanel = () => {
 
   return (
     <>
-      {/* Desktop - Left Sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-20 bg-secondary/30 border-r border-border flex-col items-center py-8 z-40">
-        <TooltipProvider>
-          <nav className="flex flex-col items-center space-y-6">
-            {navItems.map((item) => (
-              <Tooltip key={item.name} delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Link
-                    to={item.path}
-                    className={`
-                      relative p-3 rounded-xl transition-all duration-300
-                      ${isActive(item.path) 
-                        ? 'bg-gold/20 shadow-lg shadow-gold/20' 
-                        : 'hover:bg-muted/50'
-                      }
-                    `}
-                  >
-                    <img 
-                      src={item.icon} 
-                      alt={item.name}
-                      className={`w-8 h-8 transition-all duration-300 ${
-                        isActive(item.path) ? 'brightness-0 invert' : 'opacity-70 hover:opacity-100'
-                      }`}
-                    />
-                    {isActive(item.path) && (
-                      <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-gold rounded-r-full"></div>
-                    )}
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="bg-card border-border">
-                  <p className="text-sm font-medium">{item.name}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </nav>
-        </TooltipProvider>
+      {/* Desktop - Left Sidebar Yellow Pill */}
+      <aside className="hidden md:flex fixed left-6 top-1/2 -translate-y-1/2 z-40">
+        <div className="bg-gold rounded-full p-4 shadow-gold-lg">
+          <TooltipProvider>
+            <nav className="flex flex-col items-center gap-8">
+              {navItems.map((item) => (
+                <Tooltip key={item.name} delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to={item.path}
+                      className="group relative"
+                    >
+                      <img 
+                        src={item.icon} 
+                        alt={item.name}
+                        className="w-8 h-8 transition-all duration-300 brightness-0"
+                      />
+                      {isActive(item.path) && (
+                        <div className="absolute inset-0 rounded-full bg-black/20 animate-pulse"></div>
+                      )}
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="bg-gold text-black border-0">
+                    <p className="text-sm font-semibold">{item.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </nav>
+          </TooltipProvider>
+        </div>
       </aside>
 
-      {/* Mobile - Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-secondary/95 backdrop-blur-md border-t border-border z-50">
-        <div className="flex items-center justify-evenly h-full px-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`
-                relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300
-                ${isActive(item.path) 
-                  ? 'bg-gold/20' 
-                  : 'active:bg-muted/30'
-                }
-              `}
-            >
-              <img 
-                src={item.icon} 
-                alt={item.name}
-                className={`w-6 h-6 transition-all duration-300 ${
-                  isActive(item.path) ? 'brightness-0 invert' : 'opacity-70'
-                }`}
-              />
-              <span className={`text-xs mt-1 transition-colors duration-300 ${
-                isActive(item.path) ? 'text-gold font-medium' : 'text-muted-foreground'
-              }`}>
-                {item.name}
-              </span>
-              {isActive(item.path) && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-b-full"></div>
-              )}
-            </Link>
-          ))}
+      {/* Mobile - Bottom Bar Yellow Pill */}
+      <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <div className="bg-gold rounded-full px-8 py-3 shadow-gold-lg">
+          <div className="flex items-center gap-12">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className="relative group"
+              >
+                <img 
+                  src={item.icon} 
+                  alt={item.name}
+                  className="w-7 h-7 transition-all duration-300 brightness-0"
+                />
+                {isActive(item.path) && (
+                  <div className="absolute inset-0 rounded-full bg-black/20 animate-pulse"></div>
+                )}
+              </Link>
+            ))}
+          </div>
         </div>
       </nav>
     </>

@@ -15,7 +15,7 @@ const HomeInstalled = () => {
       <NavigationPanel />
       
       {/* Main Content - Add padding for navigation panels */}
-      <div className="md:pl-20 pb-16 md:pb-0">
+      <div className="pb-24 md:pb-12">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-overlay opacity-50"></div>

@@ -226,15 +226,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border">
-        <div className="container mx-auto text-center text-muted-foreground">
-          <p className="text-sm">
-            © 2025 Elevatica. Empowering Market Research.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

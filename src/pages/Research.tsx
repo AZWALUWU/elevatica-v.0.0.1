@@ -143,7 +143,7 @@ const Research = () => {
     <div className="min-h-screen bg-background">
       <NavigationPanel />
       
-      <div className="md:pl-20 pb-16 md:pb-0">
+      <div className="pb-24 md:pb-12">
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">

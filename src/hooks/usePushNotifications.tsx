@@ -54,18 +54,18 @@ export const usePushNotifications = () => {
       });
       
       // Uncomment when you have a real VAPID key:
-      // const subscription = await registration.pushManager.subscribe({
-      //   userVisibleOnly: true,
-      //   applicationServerKey: vapidPublicKey
-      // });
-      // setSubscription(subscription);
+       const subscription = await registration.pushManager.subscribe({
+         userVisibleOnly: true,
+         applicationServerKey: vapidPublicKey
+       });
+       setSubscription(subscription);
       
       // Send subscription to your backend:
-      // await fetch('/api/push-subscribe', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(subscription)
-      // });
+       await fetch('/api/push-subscribe', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(subscription)
+       });
       
       return null;
     } catch (error) {
