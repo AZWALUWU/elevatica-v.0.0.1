@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, TrendingUp, Shield, BarChart3, Check, Bell } from 'lucide-react';
+import { ArrowRight, TrendingUp, Shield, BarChart3, Check, Bell, User } from 'lucide-react';
 import NavigationPanel from '@/components/NavigationPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import elevaticaLogo from '@/assets/elevatica-logo.png';
 
 const HomeInstalled = () => {
   const { user } = useAuth();
@@ -14,10 +15,24 @@ const HomeInstalled = () => {
     <div className="min-h-screen bg-background">
       <NavigationPanel />
       
-      {/* Main Content - Add padding for navigation panels */}
-      <div className="pb-24 md:pb-12">
+      {/* Header - Mobile and Desktop */}
+      <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm">
+        <div className="flex items-center justify-between px-4 md:px-6 py-3">
+          <Link to="/home" className="flex items-center">
+            <img src={elevaticaLogo} alt="Elevatica" className="h-10 w-10 rounded-full" />
+          </Link>
+          <Link to="/profile">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <User className="h-5 w-5 text-gold" />
+            </Button>
+          </Link>
+        </div>
+      </header>
+      
+      {/* Main Content */}
+      <div className="pb-24 md:pb-12 pt-16 md:pt-0">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <section className="relative pt-16 md:pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-overlay opacity-50"></div>
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-3xl"></div>
@@ -26,16 +41,21 @@ const HomeInstalled = () => {
 
         <div className="container mx-auto relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              <span className="text-foreground">Elevatica Tingkatkan</span>
-              <br />
-              <span className="bg-gradient-gold bg-clip-text text-transparent">
-                Analisa Market
-              </span>
-            </h1>
+            <div className="mb-8 space-y-2">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                <span className="text-foreground">Elevatica</span>
+              </h1>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
+                Tingkatkan
+              </h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
+                <span className="bg-gradient-gold bg-clip-text text-transparent">
+                  Analisa Market
+                </span>
+              </h2>
+            </div>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto px-4">
               Sebuah platform berbasis riset untuk analisis pasar dan wawasan investasi.
-              Memberdayakan pengambilan keputusan melalui ketepatan statistik, fundamental, dan ketelitian teknikal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
               {user ? (

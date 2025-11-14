@@ -15,6 +15,20 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format } from 'date-fns';
 
+const sendPushNotification = async (blogId: string, title: string) => {
+  try {
+    await supabase.functions.invoke('send-push-notification', {
+      body: {
+        title: 'Research Baru Elevatica',
+        body: title,
+        blogId
+      }
+    });
+  } catch (error) {
+    console.error('Error sending push notification:', error);
+  }
+};
+
 interface Blog {
   id: string;
   title: string;
@@ -126,9 +140,10 @@ const Profile = () => {
           description: 'Research berhasil diperbarui.',
         });
       } else {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('blogs')
-          .insert([blogData]);
+          .insert([blogData])
+          .select();
         
         if (error) throw error;
         
@@ -136,6 +151,11 @@ const Profile = () => {
           title: 'Berhasil',
           description: 'Research berhasil dibuat.',
         });
+
+        // Send push notification for new research
+        if (data && data[0]) {
+          await sendPushNotification(data[0].id, blogData.title);
+        }
       }
 
       setDialogOpen(false);
