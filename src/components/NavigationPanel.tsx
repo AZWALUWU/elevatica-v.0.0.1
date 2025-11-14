@@ -11,7 +11,6 @@ const NavigationPanel = () => {
   const navItems = [
     { name: 'Home', icon: homeIcon, path: '/home' },
     { name: 'Riset', icon: marketAnalysisIcon, path: '/research' },
-    { name: 'Profile', icon: userIcon, path: '/profile' },
   ];
 
   const isActive = (path: string) => currentPath === path;
@@ -51,9 +50,9 @@ const NavigationPanel = () => {
       </aside>
 
       {/* Mobile - Bottom Bar Yellow Pill */}
-      <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-        <div className="bg-gold rounded-full px-8 py-3 shadow-gold-lg">
-          <div className="flex items-center gap-12">
+      <nav className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-auto">
+        <div className="bg-gold rounded-full px-10 py-4 shadow-gold-lg">
+          <div className="flex items-center gap-16">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -63,7 +62,7 @@ const NavigationPanel = () => {
                 <img 
                   src={item.icon} 
                   alt={item.name}
-                  className="w-7 h-7 transition-all duration-300 brightness-0"
+                  className="w-8 h-8 transition-all duration-300 brightness-0"
                 />
                 {isActive(item.path) && (
                   <div className="absolute inset-0 rounded-full bg-black/20 animate-pulse"></div>
