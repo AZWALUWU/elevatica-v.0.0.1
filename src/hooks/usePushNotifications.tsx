@@ -10,6 +10,15 @@ export const usePushNotifications = () => {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       setIsSupported(true);
       setPermission(Notification.permission);
+      
+      // Register service worker
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error);
+        });
     }
   }, []);
 
@@ -44,30 +53,34 @@ export const usePushNotifications = () => {
     try {
       const registration = await navigator.serviceWorker.ready;
       
-      // Placeholder VAPID public key - replace with your Firebase Cloud Messaging key
-      // To get FCM key: https://console.firebase.google.com/project/_/settings/cloudmessaging/
-      const vapidPublicKey = import.meta.env.VITE_FIREBASE_VAPID_PUBLIC_KEY;
+      const vapidPublicKey = 'BOI7b3ziw3gxxzo_IACqGQeGU6Sz4Rqy8AlZ43aGblXOUf5ApkbS_XBnMr3upU-fi9fCTsf0QU0BrcjOJ-ATfk8';
       
-      // For now, just show a toast that FCM needs to be configured
-      toast.info('Push notifications ready! Configure Firebase Cloud Messaging to enable.', {
-        description: 'Add your VAPID key in src/hooks/usePushNotifications.tsx'
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidPublicKey
       });
       
-      // Uncomment when you have a real VAPID key:
-       const subscription = await registration.pushManager.subscribe({
-         userVisibleOnly: true,
-         applicationServerKey: vapidPublicKey
-       });
-       setSubscription(subscription);
+      setSubscription(subscription);
       
-      // Send subscription to your backend:
-       await fetch('/api/push-subscribe', {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify(subscription)
-       });
+      // Send subscription to backend
+      const { supabase } = await import('@/integrations/supabase/client');
+      const subscriptionData = subscription.toJSON();
       
-      return null;
+      const { error } = await supabase.from('push_subscriptions').insert({
+        endpoint: subscriptionData.endpoint!,
+        p256dh: subscriptionData.keys!.p256dh,
+        auth: subscriptionData.keys!.auth,
+        user_id: (await supabase.auth.getUser()).data.user?.id
+      });
+      
+      if (error) {
+        console.error('Error saving subscription:', error);
+        toast.error('Failed to save push notification subscription');
+        return null;
+      }
+      
+      toast.success('Push notifications enabled successfully!');
+      return subscription;
     } catch (error) {
       console.error('Error subscribing to push:', error);
       toast.error('Failed to subscribe to push notifications');
